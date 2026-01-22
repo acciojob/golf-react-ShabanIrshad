@@ -1,4 +1,4 @@
-import React, { Component, useState ,setState} from "react";
+import React, { Component } from "react";
 import '../styles/App.css';
 
 class App extends Component {
@@ -9,13 +9,13 @@ class App extends Component {
             posi : 0,
             ballPosition: { left: "0px" }
         };
-        this.renderChoice = this.renderBallOrButton.bind(this)
+        this.handleKeyDown = this.handleKeyDown.bind(this)
         this.buttonClickHandler = this.buttonClickHandler.bind(this);
     };
 
     buttonClickHandler() {
         this.setState({
-            renderBall:!this.state.renderBall
+            renderBall:true
         })
    }
     renderBallOrButton() {
@@ -25,28 +25,36 @@ class App extends Component {
 		    return <button className='start' onClick={this.buttonClickHandler} >Start</button>
 		}
     }
+
+    handleKeyDown(event){
+        if(event.key === "ArrowRight" && this.state.renderBall){
+            this.setState(preState => {
+                const newPosi = preState.posi + 5;
+                return {
+                    posi : newPosi, 
+                    ballPosition : {left : newPosi + "px"}
+                }
+            })
+        }
+            
+    }
     
    
 
     // bind ArrowRight keydown event
     componentDidMount() {
-     document.addEventListener("keydown", (event)=>{
-        console.log(event.key);
-        if(event.key==='ArrowRight'){
-            this.setState(prevState=>({
-                posi:prevState.posi+5,
-                ballPosition:{left:`${prevState.posi+5}px`}
-            }))
-            console.log(this.state);
-        }
-    });
+     document.addEventListener("keydown", this.handleKeyDown)
+    }
+
+    componentWillUnmount(){
+        document.addEventListener("keydown", this.handleKeyDown)
     }
     
     
     render() {
         // console.log(this.state.ballPosition.left);
         return (
-            <div className="playground" style={{position:"relative",...this.state.ballPosition}}>
+            <div className="playground" >
                 {this.renderBallOrButton()}
             </div>
         )
