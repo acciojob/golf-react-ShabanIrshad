@@ -20,14 +20,14 @@ class App extends Component {
    }
     renderBallOrButton() {
 		if (this.state.renderBall) {
-		    return <div className="ball" style={this.state.ballPosition}></div>
+		    return <div className="ball" style={this.state.ballPosition} tabIndex="0" onKeyDown={this.handleKeyDown}></div>
 		} else {
 		    return <button className='start' onClick={this.buttonClickHandler} >Start</button>
 		}
     }
 
     handleKeyDown(event){
-        if(event.key === "ArrowRight" && this.state.renderBall){
+        if(event.keyCode === 39 ){
             this.setState(preState => {
                 const newPosi = preState.posi + 5;
                 return {
@@ -36,19 +36,10 @@ class App extends Component {
                 }
             })
         }
+        // console.log(this.state);
             
     }
     
-   
-
-    // bind ArrowRight keydown event
-    componentDidMount() {
-     document.addEventListener("keydown", this.handleKeyDown)
-    }
-
-    componentWillUnmount(){
-        document.addEventListener("keydown", this.handleKeyDown)
-    }
     
     
     render() {
